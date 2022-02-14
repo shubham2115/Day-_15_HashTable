@@ -8,6 +8,8 @@ namespace HashTable
 {
     public class Frequency
     {
+
+
         Dictionary<string, int> frequency = new Dictionary<string, int>();
         public void Frequency1(MyMapNode<int, string> hash)
         {
