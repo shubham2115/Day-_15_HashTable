@@ -6,80 +6,82 @@ using System.Threading.Tasks;
 
 namespace HashTable
 {
-    class BinarySearchTree<T> where T : IComparable<T>
+    class MyMapNode<K, V>
     {
-        public T NodeData { get; set; }
-        public BinarySearchTree<T> leftTree { get; set; }
-        public BinarySearchTree<T> rightTree { get; set; }
+        private readonly int _size;
+        private readonly LinkedList<KeyValue<K, V>>[] items;
 
-        public BinarySearchTree(T nodeData)
+        public MyMapNode(int size)
         {
-            this.NodeData = nodeData;
-            this.rightTree = null;
-            this.leftTree = null;
-
+            this._size = size;
+            this.items = new LinkedList<KeyValue<K, V>>[size];
         }
 
-        int leftCount = 0, rightCount = 0;
-        bool result = false;
-        public void Insert(T item)
+        public int GetArrayPosition(K key)
         {
-            T currentNodeValue = this.NodeData;
-            if ((currentNodeValue.CompareTo(item)) > 0)
-            {
-                if (this.leftTree == null)
-                    this.leftTree = new BinarySearchTree<T>(item);
-                else
-                    this.leftTree.Insert(item);
-            }
-            else
-            {
-                if (this.rightTree == null)
-                    this.rightTree = new BinarySearchTree<T>(item);
-                else
-                    this.rightTree.Insert(item);
-            }
+            int position = key.GetHashCode() % _size;
+            return Math.Abs(position);
         }
 
-
-        public void Display()
+        public V Get(K key)
         {
-            if (this.leftTree != null)
+            int position = GetArrayPosition(key);
+            LinkedList<KeyValue<K, V>> linkedList = GetLinkedList(position);
+            foreach (KeyValue<K, V> item in linkedList)
             {
-                this.leftCount++;
-                this.leftTree.Display();
-
+                if (item.key.Equals(key))
+                {
+                    return item.value;
+                }
             }
-            Console.WriteLine(this.NodeData.ToString());
-            if (this.rightTree != null)
-            {
-                this.rightCount++;
-                this.rightTree.Display();
-            }
+            return default(V);
         }
 
-        public void GetSize()
+        public void Add(K key, V value)
         {
-            Console.WriteLine("Size" + " " + (1 + this.leftCount + this.rightCount));
+            int position = GetArrayPosition(key);
+            LinkedList<KeyValue<K, V>> linkedList = GetLinkedList(position);
+            KeyValue<K, V> item = new KeyValue<K, V>() { key = key, value = value };
+            linkedList.AddLast(item);
         }
 
-        public bool IfExists(T element, BinarySearchTree<T> node)
+        public LinkedList<KeyValue<K, V>> GetLinkedList(int position)
         {
-            if (node == null)
-                return false;
-            if (node.NodeData.Equals(element))
+            LinkedList<KeyValue<K, V>> linkedList = items[position];
+            if (linkedList == null)
             {
-                Console.WriteLine("Found the element in BST" + " " + node.NodeData);
-                result = true;
+                linkedList = new LinkedList<KeyValue<K, V>>();
+                items[position] = linkedList;
             }
-            else
-                Console.WriteLine("Current element is {0} in BST", node.NodeData);
-            if (element.CompareTo(node.NodeData) < 0)
-                IfExists(element, node.leftTree);
-            if (element.CompareTo(node.NodeData) > 0)
-                IfExists(element, node.rightTree);
-            return result;
+            return linkedList;
         }
+
+        public int GetFrequencyOfWords(V value)
+        {
+            int count = 0;
+            if (items == null)
+            {
+                Console.WriteLine("Hash Table is Empty!");
+                return 0;
+            }
+            for (int i = 0; i < items.Length; i++)
+            {
+                LinkedList<KeyValue<K, V>> linkedList = GetLinkedList(i);
+                foreach (KeyValue<K, V> item in linkedList)
+                {
+                    if (item.value.Equals(value))
+                        count++;
+                }
+            }
+            return count;
+        }
+
+        public struct KeyValue<Ke, Va>
+        {
+            public Ke key { get; set; }
+            public Va value { get; set; }
+        }
+
 
 
 
