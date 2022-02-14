@@ -2,21 +2,19 @@
 using HashTable;
 
 
-Console.WriteLine("Hello World!");
-BinarySearchTree<int> binarySearch = new BinarySearchTree<int>(56);
-binarySearch.Insert(30);
-binarySearch.Insert(70);
-binarySearch.Insert(22);
-binarySearch.Insert(40);
-binarySearch.Insert(60);
-binarySearch.Insert(95);
-binarySearch.Insert(11);
-binarySearch.Insert(65);
-binarySearch.Insert(3);
-binarySearch.Insert(16);
-binarySearch.Insert(63);
-binarySearch.Insert(67);
-binarySearch.Display();
-bool result = binarySearch.IfExists(63, binarySearch);
-Console.WriteLine(result);
-Console.ReadKey();
+Console.WriteLine("Welcome to Hash Table Program");
+Console.WriteLine();
+
+
+MyMapNode<string, string> hash = new MyMapNode<string, string>(5);
+hash.Add("0", "to");
+hash.Add("1", "be");
+hash.Add("2", "or");
+hash.Add("3", "not");
+hash.Add("4", "to");
+hash.Add("5", "be");
+
+Console.WriteLine("Frequency of \'to\'  : " + hash.GetFrequencyOfWords("to"));
+Console.WriteLine("Frequency of \'be\' : " + hash.GetFrequencyOfWords("be"));
+Console.WriteLine("Frequency of \'or\' : " + hash.GetFrequencyOfWords("or"));
+Console.WriteLine("Frequency of \'not\' : " + hash.GetFrequencyOfWords("not"));
